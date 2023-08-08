@@ -1,0 +1,13 @@
+---
+# handlers file for zookeeper
+- name: start zookeeper 
+  systemd:
+    name: zookeeper
+    state: started
+    daemon_reload: true
+
+- name: enable zookeeper 
+  systemd:
+    name: zookeeper
+    enabled: true
+  ignore_errors: true

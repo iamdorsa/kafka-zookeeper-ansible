@@ -1,0 +1,52 @@
+---
+# tasks file for zookeeper
+- name: Create Zookeeper user and group
+  user:
+    name: "{{ zookeeper_user }}"
+    shell: /bin/bash
+    system: yes
+    create_home: yes
+
+- name: Download Zookeeper binary
+  ansible.builtin.get_url:
+    url: "{{ zookeeper_download_url }}"
+    dest: /tmp
+    mode: 0755
+  register: zookeeper_tar_file 
+
+- name: extract archive
+  ansible.builtin.unarchive:
+    src: "{{ zookeeper_tar_file.dest }}"
+    dest: "{{ zookeeper_installation }}"
+    owner: "{{ zookeeper_user }}"
+    group: "{{ zookeeper_group }}"
+    remote_src: true
+    validate_certs: true
+
+- name: Delete archive file
+  ansible.builtin.file:
+    path: "{{ zookeeper_tar_file.dest }}"
+    state: absent
+
+- name: Create directory for Zookeeper log directory
+  file:
+    path: "{{ item }}"
+    state: directory
+    owner: "{{ zookeeper_user }}"
+    group: "{{ zookeeper_group }}"
+    mode: 0755
+    recurse: true
+  loop:
+    - "{{ zookeeper_log_dir }}"
+    - "{{ zookeeper_data_dir }}"
+    - "{{ zookeeper_installation }}/apache-zookeeper-{{ zookeeper_version }}-bin/logs"
+
+- name: Create symlink
+  file:
+    src: "{{ zookeeper_installation }}/apache-zookeeper-{{ zookeeper_version }}-bin"
+    dest: "{{ zookeeper_installation }}/zookeeper"
+    state: link
+    force: yes
+
+- name: configure | set log directory and cluster metadata
+  import_tasks: configure.yml

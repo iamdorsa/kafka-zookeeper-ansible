@@ -1,0 +1,27 @@
+all:
+  hosts:
+    # kafka01:
+    #   ansible_user: root 
+    #   ansible_host: 172.28.71.110
+    #   ip: 172.28.71.110
+    #   access_ip: 172.28.71.110
+    # kafka02:
+    #   ansible_user: root
+    #   ansible_host: 5.9.209.157
+    #   ip: 5.9.209.157
+    #   access_ip: 5.9.209.157
+
+    zookeeper1:
+      ansible_user: root
+      ansible_host: 5.9.209.157
+      ip: 5.9.209.157
+      access_ip: 5.9.209.157
+
+  children:
+    # brokers:
+    #   hosts:
+    #     kafka01:
+    #     kafka02: 
+    zookeepers:
+      hosts:
+        zookeeper1:

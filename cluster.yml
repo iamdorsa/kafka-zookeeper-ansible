@@ -1,0 +1,9 @@
+- hosts: all
+  gather_facts: false
+  roles:
+    - { role: prerequisites }
+
+- hosts: zookeepers
+  gather_facts: false
+  roles:
+    - { role: zookeeper }

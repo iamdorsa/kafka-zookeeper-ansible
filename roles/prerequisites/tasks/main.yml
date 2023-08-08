@@ -1,0 +1,9 @@
+---
+# tasks file for prerequisites
+- name: Install dependencies
+  apt:
+    name:
+      - openjdk-11-jdk
+      - wget
+      - default-jre
+    state: present
